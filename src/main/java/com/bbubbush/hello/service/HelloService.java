@@ -13,12 +13,18 @@ public class HelloService {
     @Autowired
     HelloMapper helloMapper;
 
-    public List<Map<String, Object>> getList () {
-        return helloMapper.getList();
+    public List<Map<String, Object>> getMeberList () {
+        return helloMapper.getMeberList();
     }
 
     public int insertMember (MemberDTO member) {
         return helloMapper.insertMember(member);
+    }
+    public int updateMember (MemberDTO member) {
+        return helloMapper.updateMember(member);
+    }
+    public int deleteMember (MemberDTO member) {
+        return helloMapper.deleteMember(member);
     }
 
 }
