@@ -1,0 +1,10 @@
+
+mybatis:
+  type-aliases-package: com.example.demo.mapper
+  mapper-locations: sqlmapper/**/*.
+
+datasource:
+  url: jdbc:postgresql://localhost:5432/test
+  username: bbubbush
+  password: bbubbush
+  driver-class-name:
