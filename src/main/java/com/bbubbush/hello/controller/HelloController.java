@@ -1,9 +1,10 @@
-package com.example.demo.controller;
+package com.bbubbush.hello.controller;
 
-import com.example.demo.service.HelloService;
+import com.bbubbush.hello.dto.MemberDTO;
+import com.bbubbush.hello.service.HelloService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,11 @@ public class HelloController {
     public List<Map<String, Object>> getList() {
         List<Map<String, Object>> list = helloService.getList();
         return list;
+    }
+    @PostMapping("/insertMember")
+    public String insertMember(@RequestBody MemberDTO member) {
+        int result = helloService.insertMember(member);
+        return result > 0 ? "success" : "fail";
     }
 
 }

@@ -1,6 +1,7 @@
-package com.example.demo.service;
+package com.bbubbush.hello.service;
 
-import com.example.demo.mapper.HelloMapper;
+import com.bbubbush.hello.dto.MemberDTO;
+import com.bbubbush.hello.mapper.HelloMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,10 @@ public class HelloService {
 
     public List<Map<String, Object>> getList () {
         return helloMapper.getList();
+    }
+
+    public int insertMember (MemberDTO member) {
+        return helloMapper.insertMember(member);
     }
 
 }
