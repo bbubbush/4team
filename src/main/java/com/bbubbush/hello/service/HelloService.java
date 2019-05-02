@@ -20,6 +20,7 @@ public class HelloService {
     public int insertMember (MemberDTO member) {
         return helloMapper.insertMember(member);
     }
+
     public int updateMember (MemberDTO member) {
         return helloMapper.updateMember(member);
     }
