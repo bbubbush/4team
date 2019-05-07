@@ -2,20 +2,14 @@ package com.bbubbush.hello.controller;
 
 import com.bbubbush.hello.dto.MemberDTO;
 import com.bbubbush.hello.service.HelloService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import kr.or.kobis.kobisopenapi.consumer.rest.KobisOpenAPIRestService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class HelloController {
@@ -25,23 +19,38 @@ public class HelloController {
     @ApiOperation(value = "헬로, 월드")
     @GetMapping("/")
     public String hello() {
-        // RestTemplate 에 MessageConverter 세팅
-        List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
-        converters.add(new FormHttpMessageConverter());
-        converters.add(new StringHttpMessageConverter());
+        // 조회일자
+        String targetDt = "20190506";
 
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setMessageConverters(converters);
+        // 발급키
+        String key = "851364883b76175e8c780b5744e817e8";
 
-        // parameter 세팅
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-        map.add("key", "851364883b76175e8c780b5744e817e8");
-        map.add("targetDt", "20190507");
+        // Rest Client 통해 호출
+        KobisOpenAPIRestService service = new KobisOpenAPIRestService(key);
 
-        // REST API 호출
-        String result = restTemplate.postForObject("http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json", map, String.class);
-        System.out.println("------------------ TEST 결과 ------------------");
-        System.out.println(result);
+        // 일일 박스오피스 서비스 호출
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("targetDt", targetDt);
+        try {
+            String dailyResponse = service.getDailyBoxOffice(true, params);
+
+            // JSON 사용
+            ObjectMapper mapper = new ObjectMapper();
+            HashMap<String, Object> dailyResult = mapper.readValue(dailyResponse, HashMap.class);
+            LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
+            boxOfficeResult.forEach((k, value) -> {
+                System.out.println("key :: " + k + ", value :: " + boxOfficeResult.get(k));
+            });
+            ArrayList<LinkedHashMap<String, Object>> dailyBoxOfficeList = (ArrayList<LinkedHashMap<String, Object>>)boxOfficeResult.get("dailyBoxOfficeList");
+            for (LinkedHashMap<String, Object> map: dailyBoxOfficeList) {
+                map.forEach((k, v) -> {
+                    System.out.println("key :: " + k + ", value :: " + map.get(k));
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 
 
