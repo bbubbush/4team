@@ -5,8 +5,15 @@ import com.bbubbush.hello.service.HelloService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +25,26 @@ public class HelloController {
     @ApiOperation(value = "헬로, 월드")
     @GetMapping("/")
     public String hello() {
+        // RestTemplate 에 MessageConverter 세팅
+        List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
+        converters.add(new FormHttpMessageConverter());
+        converters.add(new StringHttpMessageConverter());
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setMessageConverters(converters);
+
+        // parameter 세팅
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        map.add("key", "851364883b76175e8c780b5744e817e8");
+        map.add("targetDt", "20190507");
+
+        // REST API 호출
+        String result = restTemplate.postForObject("http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json", map, String.class);
+        System.out.println("------------------ TEST 결과 ------------------");
+        System.out.println(result);
+
+
+
         return "Hello, world!";
     }
 
