@@ -19,41 +19,6 @@ public class HelloController {
     @ApiOperation(value = "헬로, 월드")
     @GetMapping("/")
     public String hello() {
-        // 조회일자
-        String targetDt = "20190506";
-
-        // 발급키
-        String key = "851364883b76175e8c780b5744e817e8";
-
-        // Rest Client 통해 호출
-        KobisOpenAPIRestService service = new KobisOpenAPIRestService(key);
-
-        // 일일 박스오피스 서비스 호출
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("targetDt", targetDt);
-        try {
-            String dailyResponse = service.getDailyBoxOffice(true, params);
-
-            // JSON 사용
-            ObjectMapper mapper = new ObjectMapper();
-            HashMap<String, Object> dailyResult = mapper.readValue(dailyResponse, HashMap.class);
-            LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
-            boxOfficeResult.forEach((k, value) -> {
-                System.out.println("key :: " + k + ", value :: " + boxOfficeResult.get(k));
-            });
-            ArrayList<LinkedHashMap<String, Object>> dailyBoxOfficeList = (ArrayList<LinkedHashMap<String, Object>>)boxOfficeResult.get("dailyBoxOfficeList");
-            for (LinkedHashMap<String, Object> map: dailyBoxOfficeList) {
-                map.forEach((k, v) -> {
-                    System.out.println("key :: " + k + ", value :: " + map.get(k));
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-
         return "Hello, world!";
     }
 
