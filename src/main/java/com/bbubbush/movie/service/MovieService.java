@@ -21,17 +21,57 @@ public class MovieService {
     YamlConfig yamlConfig;
 
     public Map<String, Object> getDailyMovie(MovieSearchDTO dto) {
+        // DTO를 Map으로 변환
+        Map<String, Object> param = this.dtoToMap(dto);
+        // 발급키
+        String key = yamlConfig.getKey();
+
+        // Rest Client 통해 호출
+        KobisOpenAPIRestService service = new KobisOpenAPIRestService(key);
+        HashMap<String, Object> dailyResult = null;
+
+        try {
+            String dailyResponse = service.getDailyBoxOffice(true, param);
+
+            // JSON 사용
+            ObjectMapper mapper = new ObjectMapper();
+            dailyResult = mapper.readValue(dailyResponse, HashMap.class);
+            LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
+
+            dailyResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
+
+//            boxOfficeResult.forEach((k, value) -> {
+//                System.out.println("key :: " + k + ", value :: " + boxOfficeResult.get(k));
+//            });
+
+            //ArrayList<LinkedHashMap<String, Object>> dailyBoxOfficeList = (ArrayList<LinkedHashMap<String, Object>>)boxOfficeResult.get("dailyBoxOfficeList");
+            //for (LinkedHashMap<String, Object> map: dailyBoxOfficeList) {
+//                map.forEach((k, v) -> {
+//                    System.out.println("key :: " + k + ", value :: " + map.get(k));
+//                });
+            //}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+        return dailyResult;
+    }   // end of getDailyMovie method
+
+    // DTO를 Map으로 변환하는 메서드
+    public Map<String, Object> dtoToMap (MovieSearchDTO dto) {
         Map<String, Object> inParam = new HashMap<>();
         try {
-
-            Field[] fields = dto.getClass().getDeclaredFields();
+            Field[] fields = dto.getClass().getDeclaredFields();    // MovieSearchDTO의 모든 필드를 받음
 
             for (Field field: fields) {
-                String fieldName = field.getName();
-                String methodName = fieldName.replace(fieldName.substring(0, 1), fieldName.substring(0, 1).toUpperCase());
-                inParam.put(fieldName, dto.getClass().getDeclaredMethod("get" + methodName).invoke(dto));
-                System.out.println("fieldName :: " + fieldName);
-                System.out.println("methodName :: " + methodName);
+                String fieldName = field.getName(); // 필드의 이름
+                String methodName = fieldName.replaceFirst  (
+                                                                fieldName.substring(0, 1),
+                                                                fieldName.substring(0, 1).toUpperCase()
+                                                            ); // 필드의 첫번째 이름을 대문자로 변경(getter형식에 맞추기위해)
+                inParam.put(fieldName, dto.getClass().getDeclaredMethod("get" + methodName).invoke(dto));   // key, value형태로 저장
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -40,40 +80,8 @@ public class MovieService {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        return inParam;
+    }   // end of dtoToMap method
 
 
-        // 조회일자
-        String targetDt = "20190506";
-
-        // 발급키
-        String key = yamlConfig.getKey();
-        System.out.println("key :: " + key);
-
-        // Rest Client 통해 호출
-        KobisOpenAPIRestService service = new KobisOpenAPIRestService(key);
-        HashMap<String, Object> dailyResult = null;
-        try {
-            String dailyResponse = service.getDailyBoxOffice(true, inParam);
-
-            // JSON 사용
-            ObjectMapper mapper = new ObjectMapper();
-            dailyResult = mapper.readValue(dailyResponse, HashMap.class);
-            LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
-            boxOfficeResult.forEach((k, value) -> {
-                System.out.println("key :: " + k + ", value :: " + boxOfficeResult.get(k));
-            });
-            ArrayList<LinkedHashMap<String, Object>> dailyBoxOfficeList = (ArrayList<LinkedHashMap<String, Object>>)boxOfficeResult.get("dailyBoxOfficeList");
-            for (LinkedHashMap<String, Object> map: dailyBoxOfficeList) {
-                map.forEach((k, v) -> {
-                    System.out.println("key :: " + k + ", value :: " + map.get(k));
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-        return dailyResult;
-    }
 }
