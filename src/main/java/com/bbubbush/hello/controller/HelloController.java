@@ -2,14 +2,13 @@ package com.bbubbush.hello.controller;
 
 import com.bbubbush.hello.dto.MemberDTO;
 import com.bbubbush.hello.service.HelloService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import kr.or.kobis.kobisopenapi.consumer.rest.KobisOpenAPIRestService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class HelloController {
