@@ -38,18 +38,8 @@ public class MovieService {
             dailyResult = mapper.readValue(dailyResponse, HashMap.class);
             LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
 
-            dailyResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
-
-//            boxOfficeResult.forEach((k, value) -> {
-//                System.out.println("key :: " + k + ", value :: " + boxOfficeResult.get(k));
-//            });
-
-            //ArrayList<LinkedHashMap<String, Object>> dailyBoxOfficeList = (ArrayList<LinkedHashMap<String, Object>>)boxOfficeResult.get("dailyBoxOfficeList");
-            //for (LinkedHashMap<String, Object> map: dailyBoxOfficeList) {
-//                map.forEach((k, v) -> {
-//                    System.out.println("key :: " + k + ", value :: " + map.get(k));
-//                });
-            //}
+            dailyResult = boxOfficeResult;
+            dailyResult.put("data", dailyResult.get("dailyBoxOfficeList"));
         } catch (Exception e) {
             e.printStackTrace();
         }

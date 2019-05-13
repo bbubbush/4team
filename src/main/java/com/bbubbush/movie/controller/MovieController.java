@@ -16,11 +16,12 @@ public class MovieController {
     @Autowired
     MovieService movieService;
 
+    /**
+     * 박스오피스 조회 api 연습문제
+     * */
     @GetMapping(value = "/getDailyMovie")
     public Map<String, Object> getDailyMovie(@ModelAttribute MovieSearchDTO param) {
-        System.out.println(param.getTargetDt());
         Map<String, Object> result = movieService.getDailyMovie(param);
-        result.put("data",  result.get("dailyBoxOfficeList"));
         return result;
     }
 }
