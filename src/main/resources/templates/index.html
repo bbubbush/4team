@@ -6,9 +6,21 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/datatables.min.css}"/>
     <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/script/datatables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/script/movieApi.js}"></script>
     <script>
         $(document).ready(()=>{
             let param = new Object();
+
+            // 조회일자 유효성 검사
+            let vaildateParam = ()=>{
+                console.log($('#targetDt').val());
+                console.log("trim :: " + $.trim($('#targetDt').val()) );
+                if ($.trim($('#targetDt').val()) == "") {
+                    return false;
+                }
+                return true;
+            }
+
 
             $('#tbl_boxoffice').DataTable({
                 language: {
@@ -22,26 +34,42 @@
                         previous: "이전 페이지"
                     }
                 },
-                ajax: {
-                        url: '/movie/getDailyMovie',
-                        method: 'GET',
-                        contentType: "application/json",
-                        data: function (d) {
-                            d.targetDt = '20190501'
-                        }
+                ajax: function (data, callback, settings) {
+                    if (!vaildateParam()) {
+                        alert('조회일자는 필수값입니다.');
+                        return false;
+                    }
+
+                    let param = {
+                        targetDt: $('#targetDt').val()
+                    }
+
+                    movieApi.getDailyMovie(param, (response)=>{
+                        console.log(response);
+                    })
+
+
                 },
 
 
                 columns: [
                     {data: "rank"},
                     {data: "showRange", render: function () {
-                        return '20190501'
+                        return $('#targetDt').val()
                     }},
                     {data: "movieNm"},
                     {data: "audiAcc"},
                     {data: "salesAmt"},
                 ],
             });
+
+            // 검색
+            //$('#submit').on('click', ()=>{
+            //    console.log('test');
+            //    $('#tbl_boxoffice').DataTable().ajax();
+            //})
+
+
         });
 
     </script>
