@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OAuth Main</title>
+
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+</head>
+<body>
+    <a id="kakao-login-btn"></a>
+    <a href="http://developers.kakao.com/logout"></a>
+    <button id="logout">로그아웃 테스트</button>
+
+
+    <div>
+        <img src="" id="profile_image" alt="프로필사진">
+        <img src="" id="thumbnail_image" alt="프로필사진">
+        <input type="text" id="nickname" placeholder="nickname" />
+    </div>
+    <script>
+        Kakao.init('17e671f8411c0827f501392697a54c22'); // 인증키
+
+        // 카카오 로그인 버튼을 생성합니다.
+        Kakao.Auth.createLoginButton({
+          container: '#kakao-login-btn',
+          success: function(authObj) {
+            console.log(JSON.stringify(authObj));
+            Kakao.API.request({
+               url: '/v1/user/me',
+               success: function(req) {
+                console.log(req);
+                document.getElementById('profile_image').src = req.properties.profile_image;
+                document.getElementById('thumbnail_image').src = req.properties.thumbnail_image;
+                document.getElementById('nickname').value = req.properties.nickname;
+
+               }
+            })
+
+
+          },
+          fail: function(err) {
+             alert(JSON.stringify(err));
+          }
+        });
+
+        document.getElementById('logout').addEventListener('click', function() {
+            Kakao.API.request({
+               url: '/v1/user/unlink',
+               success: function(req) {
+                console.log(req);
+               }
+            })
+        })
+    </script>
+</body>
+</html>
