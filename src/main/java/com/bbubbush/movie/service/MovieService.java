@@ -25,6 +25,7 @@ public class MovieService {
         String key = yamlConfig.getKey();
 
         // Rest Client 통해 호출
+
         KobisOpenAPIRestService service = new KobisOpenAPIRestService(key);
         HashMap<String, Object> dailyResult = null;
 
