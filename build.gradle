@@ -39,5 +39,6 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.kopitubruk.util/JSONUtil
 	compile group: 'org.kopitubruk.util', name: 'JSONUtil', version: '1.6'
-	
+	// 내부 jar파일 모두 인스톨
+	compile files('libs/kobis-opcl-rest-v1.0.jar')
 }
