@@ -26,22 +26,22 @@ public class MovieService {
 
         // Rest Client 통해 호출
 
-        KobisOpenAPIRestService service = new KobisOpenAPIRestService(key);
         HashMap<String, Object> dailyResult = null;
-
-        try {
-            String dailyResponse = service.getDailyBoxOffice(true, param);
-
-            // JSON 사용
-            ObjectMapper mapper = new ObjectMapper();
-            dailyResult = mapper.readValue(dailyResponse, HashMap.class);
-            LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
-
-            dailyResult = boxOfficeResult;
-            dailyResult.put("data", dailyResult.get("dailyBoxOfficeList"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        KobisOpenAPIRestService service = new KobisOpenAPIRestService(key);
+//
+//        try {
+//            String dailyResponse = service.getDailyBoxOffice(true, param);
+//
+//            // JSON 사용
+//            ObjectMapper mapper = new ObjectMapper();
+//            dailyResult = mapper.readValue(dailyResponse, HashMap.class);
+//            LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>)dailyResult.get("boxOfficeResult");
+//
+//            dailyResult = boxOfficeResult;
+//            dailyResult.put("data", dailyResult.get("dailyBoxOfficeList"));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 
 
