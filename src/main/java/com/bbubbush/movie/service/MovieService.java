@@ -2,15 +2,12 @@ package com.bbubbush.movie.service;
 
 import com.bbubbush.config.YamlConfig;
 import com.bbubbush.movie.dto.MovieSearchDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.or.kobis.kobisopenapi.consumer.rest.KobisOpenAPIRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
